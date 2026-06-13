@@ -138,7 +138,7 @@ def run_single_experiment(model_name, dataset_name, T, seed, device, output_dir)
             batch_size=64, eval_batch_size=128, seed=42,
         )
         converter = ANNtoSNNConverter(
-            model, T=T, norm_percentile=0.9995, device=torch.device("cpu"),
+            model, T=T, norm_percentile=0.99, device=torch.device("cpu"),
         )
         snn = converter.convert(calib_loader, n_calib_batches=4)
         # Keep SNN on CPU for evaluation (SpikingJelly + MPS can be unstable)
@@ -221,7 +221,7 @@ def main():
         # Full reduced experiment: ~30-60 min
         datasets = ["mnist", "fashion_mnist", "cifar10"]
         models = ["vgg9", "resnet18"]
-        timesteps = [1, 4, 8, 16, 32, 64]
+        timesteps = [4, 16, 32, 64, 128, 256]
         seeds = [42]
         print(f"\n[STANDARD MODE] {len(datasets)} datasets / {len(models)} models / "
               f"{len(timesteps)} timesteps / {len(seeds)} seeds")

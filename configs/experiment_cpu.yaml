@@ -24,8 +24,8 @@ training:
   scheduler: cosine
 
 conversion:
-  norm_percentile: 0.9995
-  calibration_batches: 4    # Reduced from 8 for speed
+  norm_percentile: 0.99
+  calibration_batches: 8    # Increased for better threshold estimation
   encoding: rate_coding
 
 evaluation:

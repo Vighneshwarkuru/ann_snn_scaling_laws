@@ -73,7 +73,11 @@ class ANNtoSNNConverter:
         ann = copy.deepcopy(self.ann).cpu()
         ann.eval()
 
-        converter = ann2snn.Converter(mode="max", dataloader=calibration_loader)
+        # mode="max" sets thresholds too high, causing poor accuracy at low T.
+        # mode="99.9%" or lower percentile gives much better conversion quality.
+        # Literature shows 99% or 99.9% is optimal for most architectures.
+        mode_str = f"{self.norm_percentile * 100:.1f}%"
+        converter = ann2snn.Converter(mode=mode_str, dataloader=calibration_loader)
         snn = converter(ann)
         # Keep on CPU; caller moves to target device
         snn = snn.cpu()

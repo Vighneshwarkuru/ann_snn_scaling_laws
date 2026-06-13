@@ -19,7 +19,7 @@ training:
   scheduler: cosine  # cosine or step
 
 conversion:
-  norm_percentile: 0.9995
+  norm_percentile: 0.99
   calibration_batches: 8
   # encoding: rate_coding (rate) or time_to_first_spike (ttfs)
   encoding: rate_coding
