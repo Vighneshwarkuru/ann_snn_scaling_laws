@@ -1,0 +1,38 @@
+# CPU-friendly experiment configuration
+# For MacBook without GPU - reduced sweep for feasibility
+# Full sweep takes ~2-3 hours on M-series, ~5-8 hours on Intel Mac
+
+experiment:
+  name: "ann_snn_scaling_laws_cpu"
+  output_dir: "results_real"
+  checkpoint_dir: "checkpoints"
+
+sweep:
+  # Start with simpler datasets to validate pipeline, add more later
+  datasets: [mnist, fashion_mnist, cifar10]
+  # Fewer models to keep runtime manageable
+  models: [vgg9, vgg11, resnet18]
+  # Key timestep values that capture the full scaling curve
+  timesteps: [1, 4, 8, 16, 32, 64]
+  seeds: [42, 123]
+
+training:
+  epochs: 20        # Reduced from 50 — still enough for convergence on MNIST/CIFAR
+  batch_size: 64    # Smaller batch for CPU memory
+  lr: 0.01
+  weight_decay: 5.0e-4
+  scheduler: cosine
+
+conversion:
+  norm_percentile: 0.9995
+  calibration_batches: 4    # Reduced from 8 for speed
+  encoding: rate_coding
+
+evaluation:
+  batch_size: 128   # Smaller for CPU
+  device: auto      # Will use MPS (Apple GPU) if available
+
+t_star_targets:
+  mnist: 0.99
+  fashion_mnist: 0.92
+  cifar10: 0.90
