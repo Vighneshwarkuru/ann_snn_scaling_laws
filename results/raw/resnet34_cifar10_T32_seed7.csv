@@ -1,2 +1,0 @@
-model,dataset,T,seed,depth,ann_accuracy,snn_accuracy,accuracy_drop,total_spikes,avg_spikes_per_sample,total_neurons,spike_density,snn_latency_ms_per_sample,ann_latency_ms_per_sample,E_SNN_pJ,E_ANN_pJ,energy_ratio,synops,mac_count,memory_mb,gpu_memory_mb
-resnet34,cifar10,32,7,34,0.941,0.7580732253448521,0.18292677465514784,1153958918,115395.89187464435,393216,0.2934669287990426,22.356502040130028,0.3625,103856.30268717992,3357999999.9999995,3.092802343275162e-05,115395,730000000,125.25679357271122,0.0

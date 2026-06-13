@@ -1,2 +1,0 @@
-model,dataset,T,seed,depth,ann_accuracy,snn_accuracy,accuracy_drop,total_spikes,avg_spikes_per_sample,total_neurons,spike_density,snn_latency_ms_per_sample,ann_latency_ms_per_sample,E_SNN_pJ,E_ANN_pJ,energy_ratio,synops,mac_count,memory_mb,gpu_memory_mb
-vgg9,fashion_mnist,64,42,9,0.928,0.885303048829831,0.04269695117016903,631423170,63142.3170548546,98304,0.6423168645716817,15.357292024784655,0.11875,56828.08534936914,552000000.0,0.00010294942998074119,63142,120000000,197.36117831950034,0.0
