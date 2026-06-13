@@ -58,6 +58,15 @@ def evaluate_snn(
     total = 0
     total_spikes_all = 0
 
+    # Detect output dimension ONCE before the evaluation loop
+    # This avoids corrupting SNN state during evaluation
+    _reset_snn_state(snn_model)
+    for sample_imgs, _ in test_loader:
+        sample_imgs = sample_imgs.to(device)
+        break
+    out_dim = snn_model_output_dim(snn_model, sample_imgs, device)
+    _reset_snn_state(snn_model)
+
     start_time = time.perf_counter()
     mem_before = get_memory_usage_mb()
 
@@ -74,7 +83,7 @@ def evaluate_snn(
             logger.reset()
 
             # Rate coding: repeat input T times, accumulate output
-            output_acc = torch.zeros(batch_size, snn_model_output_dim(snn_model, imgs, device), device=device)
+            output_acc = torch.zeros(batch_size, out_dim, device=device)
 
             for t in range(T):
                 out = snn_model(imgs)
