@@ -12,8 +12,8 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Data files (large)
-data/
+# Data files (large, top-level only)
+/data/
 
 # Checkpoints (large binary)
 checkpoints/
