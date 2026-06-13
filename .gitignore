@@ -1,0 +1,19 @@
+# PDFs
+*.pdf
+
+# Virtual environment
+.venv/
+
+# macOS
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Data files (large)
+data/
+
+# Checkpoints (large binary)
+checkpoints/

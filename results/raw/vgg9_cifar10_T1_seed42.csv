@@ -1,0 +1,2 @@
+model,dataset,T,seed,depth,ann_accuracy,snn_accuracy,accuracy_drop,total_spikes,avg_spikes_per_sample,total_neurons,spike_density,snn_latency_ms_per_sample,ann_latency_ms_per_sample,E_SNN_pJ,E_ANN_pJ,energy_ratio,synops,mac_count,memory_mb,gpu_memory_mb
+vgg9,cifar10,1,42,9,0.895,0.05,0.845,16929688,1692.9688114156352,98304,0.017221769321855013,0.23995768788726024,0.11875,1523.6719302740717,552000000.0,2.760275236003753e-06,1692,120000000,147.8448894051366,0.0

@@ -1,0 +1,37 @@
+experiment:
+  name: "ann_snn_scaling_laws_v1"
+  output_dir: "results"
+  checkpoint_dir: "checkpoints"
+
+sweep:
+  datasets: [mnist, fashion_mnist, cifar10, cifar100, tiny_imagenet]
+  # VGG family for depth sweep L∈{9,11,16} + ResNet for skip-connection study
+  models: [vgg9, vgg11, vgg16, resnet18, resnet34]
+  # Full timestep sweep as per spec: T∈{1,2,4,8,16,32,64,128}
+  timesteps: [1, 2, 4, 8, 16, 32, 64, 128]
+  seeds: [42, 123, 7]
+
+training:
+  epochs: 50
+  batch_size: 128
+  lr: 0.01
+  weight_decay: 5.0e-4
+  scheduler: cosine  # cosine or step
+
+conversion:
+  norm_percentile: 0.9995
+  calibration_batches: 8
+  # encoding: rate_coding (rate) or time_to_first_spike (ttfs)
+  encoding: rate_coding
+
+evaluation:
+  batch_size: 256
+  device: auto  # auto, cuda, mps, cpu
+
+# Target accuracy thresholds for T* predictor (per dataset)
+t_star_targets:
+  mnist: 0.99
+  fashion_mnist: 0.92
+  cifar10: 0.90
+  cifar100: 0.65
+  tiny_imagenet: 0.50
