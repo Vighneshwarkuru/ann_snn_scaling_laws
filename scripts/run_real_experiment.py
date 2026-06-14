@@ -38,10 +38,10 @@ from src.evaluation.evaluate_snn import evaluate_snn
 
 
 def get_device():
-    """Pick best available device. Prefer CPU for stability on Mac."""
-    # MPS can be unstable for SpikingJelly; use CPU for conversion
-    # but MPS for training if available
-    if torch.backends.mps.is_available():
+    """Pick best available device."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    elif torch.backends.mps.is_available():
         return torch.device("mps")
     return torch.device("cpu")
 
@@ -141,8 +141,9 @@ def run_single_experiment(model_name, dataset_name, T, seed, device, output_dir)
             model, T=T, norm_percentile=0.99, device=torch.device("cpu"),
         )
         snn = converter.convert(calib_loader, n_calib_batches=4)
-        # Keep SNN on CPU for evaluation (SpikingJelly + MPS can be unstable)
-        eval_device = torch.device("cpu")
+        # Move SNN to target device for evaluation
+        # CUDA works fine; MPS can be unstable with SpikingJelly
+        eval_device = device if device.type == "cuda" else torch.device("cpu")
         snn = snn.to(eval_device)
     except Exception as e:
         print(f"    [ERROR] Conversion failed: {e}")
@@ -151,7 +152,7 @@ def run_single_experiment(model_name, dataset_name, T, seed, device, output_dir)
     # Evaluate SNN
     _, test_loader = get_dataloaders(
         dataset_name, data_root="data",
-        batch_size=64, eval_batch_size=128, seed=seed,
+        batch_size=64, eval_batch_size=256 if device.type == "cuda" else 128, seed=seed,
     )
     
     try:
