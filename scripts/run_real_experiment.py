@@ -69,8 +69,8 @@ MODEL_DEPTH = {"lenet": 4, "vgg9": 9, "vgg11": 11, "vgg16": 16, "resnet18": 18, 
 # Training configs per dataset (fewer epochs for simpler datasets)
 TRAIN_CONFIGS = {
     "mnist": {"epochs": 10, "lr": 0.01, "batch_size": 128},
-    "fashion_mnist": {"epochs": 15, "lr": 0.01, "batch_size": 128},
-    "cifar10": {"epochs": 30, "lr": 0.01, "batch_size": 128},
+    "fashion_mnist": {"epochs": 10, "lr": 0.01, "batch_size": 128},
+    "cifar10": {"epochs": 15, "lr": 0.01, "batch_size": 128},
 }
 
 
@@ -160,6 +160,7 @@ def run_single_experiment(model_name, dataset_name, T, seed, device, output_dir)
             snn, test_loader, T=T,
             device=eval_device,
             mac_count_ann=ann_metrics["mac_count"],
+            max_samples=1000,
             verbose=False,
         )
     except Exception as e:
@@ -212,17 +213,17 @@ def main():
     print(f"Output: {args.output_dir}/")
 
     if args.fast:
-        # Minimal experiment: proves concept in ~5-10 min
+        # Minimal experiment: proves concept in ~5 min
         datasets = ["mnist"]
         models = ["vgg9"]
         timesteps = [4, 16, 64]
         seeds = [42]
         print("\n[FAST MODE] MNIST / VGG-9 / T=[4,16,64] / seed=42")
     else:
-        # Full reduced experiment: ~30-60 min
+        # Full experiment: ~15-30 min on GPU, ~2 hrs on CPU
         datasets = ["mnist", "fashion_mnist", "cifar10"]
         models = ["vgg9", "resnet18"]
-        timesteps = [4, 16, 32, 64, 128, 256]
+        timesteps = [4, 16, 32, 64, 128]
         seeds = [42]
         print(f"\n[STANDARD MODE] {len(datasets)} datasets / {len(models)} models / "
               f"{len(timesteps)} timesteps / {len(seeds)} seeds")
