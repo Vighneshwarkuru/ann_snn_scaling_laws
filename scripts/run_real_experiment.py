@@ -160,7 +160,7 @@ def run_single_experiment(model_name, dataset_name, T, seed, device, output_dir)
             snn, test_loader, T=T,
             device=eval_device,
             mac_count_ann=ann_metrics["mac_count"],
-            max_samples=1000,
+            max_samples=500,
             verbose=False,
         )
     except Exception as e:
@@ -204,6 +204,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run real ANN-SNN scaling experiment")
     parser.add_argument("--fast", action="store_true",
                         help="Fastest mode: MNIST only, VGG-9, T=[4,16,64]")
+    parser.add_argument("--quick", action="store_true",
+                        help="Quick mode: 2 datasets, 2 models, T=[4,16,64], 500 samples")
     parser.add_argument("--output-dir", default="results_real",
                         help="Output directory for real results")
     args = parser.parse_args()
@@ -213,14 +215,21 @@ def main():
     print(f"Output: {args.output_dir}/")
 
     if args.fast:
-        # Minimal experiment: proves concept in ~5 min
+        # Minimal experiment: proves concept in ~3 min
         datasets = ["mnist"]
         models = ["vgg9"]
         timesteps = [4, 16, 64]
         seeds = [42]
         print("\n[FAST MODE] MNIST / VGG-9 / T=[4,16,64] / seed=42")
+    elif args.quick:
+        # Quick mode: enough for multi-line plots, ~15 min on GPU
+        datasets = ["mnist", "cifar10"]
+        models = ["vgg9", "resnet18"]
+        timesteps = [4, 16, 64]
+        seeds = [42]
+        print("\n[QUICK MODE] 2 datasets / 2 models / T=[4,16,64] / 500 samples")
     else:
-        # Full experiment: ~15-30 min on GPU, ~2 hrs on CPU
+        # Full experiment: ~20 min on GPU
         datasets = ["mnist", "fashion_mnist", "cifar10"]
         models = ["vgg9", "resnet18"]
         timesteps = [4, 16, 32, 64, 128]
