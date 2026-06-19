@@ -206,6 +206,8 @@ def main():
                         help="Fastest mode: MNIST only, VGG-9, T=[4,16,64]")
     parser.add_argument("--quick", action="store_true",
                         help="Quick mode: 2 datasets, 2 models, T=[4,16,64], 500 samples")
+    parser.add_argument("--dataset", type=str, default=None,
+                        help="Run single dataset only: mnist, fashion_mnist, or cifar10")
     parser.add_argument("--output-dir", default="results_real",
                         help="Output directory for real results")
     args = parser.parse_args()
@@ -229,13 +231,18 @@ def main():
         seeds = [42]
         print("\n[QUICK MODE] 2 datasets / 2 models / T=[4,16,64] / 500 samples")
     else:
-        # Full experiment: ~20 min on GPU
+        # Full 36 experiments: 3 datasets × 2 models × 6 timesteps (~45 min on T4 GPU)
         datasets = ["mnist", "fashion_mnist", "cifar10"]
         models = ["vgg9", "resnet18"]
-        timesteps = [4, 16, 32, 64, 128]
+        timesteps = [4, 8, 16, 32, 64, 128]
         seeds = [42]
         print(f"\n[STANDARD MODE] {len(datasets)} datasets / {len(models)} models / "
               f"{len(timesteps)} timesteps / {len(seeds)} seeds")
+
+    # Filter to single dataset if --dataset flag provided
+    if args.dataset:
+        datasets = [args.dataset]
+        print(f"  → Filtered to dataset: {args.dataset}")
 
     total = len(datasets) * len(models) * len(timesteps) * len(seeds)
     print(f"Total experiments: {total}")
